@@ -1,0 +1,24 @@
+{
+  "name": "elite-discord-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Trolorol/elite-discord-bot-js.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Trolorol/elite-discord-bot-js/issues"
+  },
+  "homepage": "https://github.com/Trolorol/elite-discord-bot-js#readme",
+  "dependencies": {
+    "discord.js": "^12.5.1",
+    "dotenv": "^8.2.0",
+    "index.js": "0.0.3"
+  }
+}
