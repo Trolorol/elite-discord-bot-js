@@ -24,6 +24,7 @@ client.once('ready', () => {
   console.log('Bot Connectado');
 });
 
+
 client.on('ready', () =>{
     
     client.on('message', (msg) => {
