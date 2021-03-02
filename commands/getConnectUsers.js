@@ -1,6 +1,9 @@
 module.exports = {
     name: 'c',
     aliases: [],
+    args: '',
+    description: 'Gets the connected Users in the convivio channel',
+    argsDescription: {},
     execute(msg, args,client,result) {
         return this.getConnectedUsers(msg, client);
     },
