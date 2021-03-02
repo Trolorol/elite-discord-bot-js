@@ -4,7 +4,7 @@ module.exports = {
     aliases: ["p"],
     description: 'Responds with ping',
     argsDescription: {},
-    execute(message, args,client,result) {
+    execute(message, channel, member, args, client, result) {
         return "pong";
     }
 }

@@ -6,7 +6,7 @@ module.exports = {
     argsDescription: {
         '[commandName]': '(optional) name of the command to view arguments'
     },
-    execute(message, args, client, result) {
+    execute(message, channel, member, args, client, result) {
         result = ""
         let firstArgs = args.shift();
         if (firstArgs == undefined) {

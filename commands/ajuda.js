@@ -6,7 +6,7 @@ module.exports = {
     description: 'Manual help',
     argsDescription: {},
 
-    execute(message, args,client,result) {
+    execute(message, channel, member, args, client, result) {
         return "\n Os comandos do BOT são os seguintes: \n **--ping** --> Pinga o Bot \n **--testes** --> Link dos testes/trabalhos dos cursos";
     }
 }

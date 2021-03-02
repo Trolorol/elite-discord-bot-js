@@ -6,7 +6,7 @@ module.exports = {
     args: '',
     description: 'Creates a temp channel',
     argsDescription: {},
-    execute(msg, args,client,result) {
+    execute(msg, channel, member, args, client, result) {
         return createChannel(msg,client);
     }
 }
