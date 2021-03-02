@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const dotenv = require('dotenv').config();
 const config = require('./config.json');
-const fs = require("fs");
+const fs = require('fs');
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
@@ -16,14 +16,14 @@ client.env={
 
 const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith(".js"));
 for (const file of commandFiles) {
-    const command = require(`./commands/${file}`);
-    client.commands.set(command.name.toLowerCase(), command);
+  const command = require(`./commands/${file}`);
+  client.commands.set(command.name.toLowerCase(), command);
 }
 
-
 client.once('ready', () => {
-    console.log('Bot Connectado');
+  console.log('Bot Connectado');
 });
+
 
 client.on('ready', () =>{
     
@@ -47,9 +47,8 @@ client.on('ready', () =>{
                 msg.channel.send(result);
             }
         }
-        
     });
-})
+});
 
 
 client.login(process.env.BOT_LOGIN);
