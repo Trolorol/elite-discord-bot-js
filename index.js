@@ -34,7 +34,7 @@ client.on('ready', () =>{
             const args = msg.content.slice(client.env["PREFIX"].length).split(/ +/);
             const commandName = args.shift().toLowerCase();
             const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
-            
+            var result;
             if (command != undefined) {
                 try {
                     result = command.execute(msg, args, client, result);
