@@ -3,7 +3,10 @@ const connectedUsers = require('./getConnectUsers.js');
 module.exports = {
     name: 'mm',
     aliases: [],
-    execute(msg, args,client,result) {
+    args: '',
+    description: 'Creates a temp channel',
+    argsDescription: {},
+    execute(msg, channel, member, args, client, result) {
         return createChannel(msg,client);
     }
 }

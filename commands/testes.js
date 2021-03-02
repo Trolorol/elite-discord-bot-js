@@ -1,7 +1,12 @@
 module.exports = {
   name: 'testes',
   aliases: [],
-  execute(message, args, client, result) {
+
+  args: '',
+    description: 'Link dos testes/trabalhos dos cursos',
+    argsDescription: {},
+
+  execute(message, channel, member, args, client, result) {
     return 'https://mega.nz/folder/xfIHzQjA#PzZk1nD2Ew2jJ7KNQ8_oTw';
   },
 };

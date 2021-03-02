@@ -24,9 +24,10 @@ client.once('ready', () => {
   console.log('Bot Connectado');
 });
 
+
 client.on('ready', () =>{
     
-    client.on('message', (msg) => {
+    client.on('message', (channel,msg,member) => {
         if(msg.content.startsWith(client.env["PREFIX"])){
             const args = msg.content.slice(client.env["PREFIX"].length).split(/ +/);
             const commandName = args.shift().toLowerCase();
@@ -34,7 +35,7 @@ client.on('ready', () =>{
             var result;
             if (command != undefined) {
                 try {
-                    result = command.execute(msg, args, client, result);
+                    result = command.execute(msg, channel, member, args, client, result);
                 } catch (error) {
                     console.log("Command "+commandName+" failed to execute due to:" + error);
                 }
