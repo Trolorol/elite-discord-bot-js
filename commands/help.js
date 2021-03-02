@@ -7,12 +7,13 @@ module.exports = {
         '[commandName]': '(optional) name of the command to view arguments'
     },
     execute(message, args, client, result) {
+        result = ""
         let firstArgs = args.shift();
         if (firstArgs == undefined) {
             const commandshelp = "";
             let iter = client.commands.size;
             for (const [name, command] of client.commands) {
-                result += (((!--iter) ? "└► " : "├► ") + commandshelp + name + " " + command.args + " : " + command.description) + "\n";
+                result += (((!--iter) ? "└► " : "├► ") + commandshelp + "**"+client.env["PREFIX"]+name + "** " + command.args + " : " + command.description) + "\n";
             }
         } else {
             firstArgs = firstArgs.toLowerCase();
