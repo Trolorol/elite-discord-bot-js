@@ -1,6 +1,9 @@
 module.exports = {
     name: 'ping',
-    aliases: [],
+    args: '',
+    aliases: ["p"],
+    description: 'Responds with ping',
+    argsDescription: {},
     execute(message, args,client,result) {
         return "pong";
     }
