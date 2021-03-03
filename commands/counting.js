@@ -1,7 +1,8 @@
 module.exports = {
     name: 'counting',
     aliases: [],
-    execute(message, args, client, result) {
+    execute(message, channel, member, args, client, result) {
+      game(channel, message, member) ;
         return "blabla";
     }
 
@@ -12,22 +13,18 @@ module.exports = {
 // client bot object 
 // result 
 
-
-
-let count = 0
-let max_counting = []
-let last_clients_array = []
-
-let timeout
-
-client.on('message', ({channel, content, member}) => {
+function countingGame(channel, message, member) {
+  let count = 0
+  let max_counting = []
+  let last_clients_array = []
+  let timeout;
   // Only do this for the counting channel of course
   // If you want to simply make this work for all channels called 'counting', you
   // could use this line:
   // if (client.channels.cache.filter(c => c.name === 'counting').keyArray().includes(channel.id))
   if (channel.id === client.channels.cache.find(r=>{r.name == 'counting'}).keys()[0]) {
         
-    if (Number(content) === count + 1 && typeof last_clients_array != 'undefined' && member.user.id != last_clients_array[last_clients_array.length-1] ) {// If the message is the current count + 1...
+    if (Number(message.content) === count + 1 && typeof last_clients_array != 'undefined' && member.user.id != last_clients_array[last_clients_array.length-1] ) {// If the message is the current count + 1...
       count++
       last_clients_array.push(member.user.id)
       
@@ -50,7 +47,7 @@ client.on('message', ({channel, content, member}) => {
       if (timeout) client.clearTimeout(timeout)// Reset any existing timeout because the bot has counted so it doesn't need to
     }
   }
-})
+}
 
 function onlyUnique(value, index, self) {
   return self.indexOf(value) === index;
