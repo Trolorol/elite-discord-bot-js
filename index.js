@@ -27,7 +27,7 @@ client.once('ready', () => {
 
 client.on('ready', () =>{
     
-    client.on('message', (channel,msg,member) => {
+    client.on('message', (msg) => {
         if(msg.content.startsWith(client.env["PREFIX"])){
             const args = msg.content.slice(client.env["PREFIX"].length).split(/ +/);
             const commandName = args.shift().toLowerCase();
@@ -35,7 +35,7 @@ client.on('ready', () =>{
             var result;
             if (command != undefined) {
                 try {
-                    result = command.execute(msg, channel, member, args, client, result);
+                     result = command.execute(msg, msg.channel, msg.member, args, client, result);
                 } catch (error) {
                     console.log("Command "+commandName+" failed to execute due to:" + error);
                 }
@@ -44,6 +44,7 @@ client.on('ready', () =>{
             }
           
             if(result !=""){
+                
                 msg.channel.send(result);
             }
         }
