@@ -1,0 +1,10 @@
+version: '1'
+
+services:
+  discgram:
+    container_name: discordbot
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env
+    restart: unless-stopped
