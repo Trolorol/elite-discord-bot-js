@@ -13,12 +13,23 @@ module.exports = {
 // result 
 
 
-
+const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 let count = 0
 let max_counting = []
 let last_clients_array = []
 
-let timeout
+const csvWriter = createCsvWriter({
+  path: './database/count.csv',
+  header: [
+      {id: 'id_jogo', title: 'Jogo'},
+      {id: 'date', title:'Data'},
+      {id: 'loser', title: 'Perdedor'},
+      {id: 'debt', title: 'Dividas'},
+  ]
+});
+
+
+
 
 client.on('message', ({channel, content, member}) => {
   // Only do this for the counting channel of course
@@ -30,24 +41,20 @@ client.on('message', ({channel, content, member}) => {
     if (Number(content) === count + 1 && typeof last_clients_array != 'undefined' && member.user.id != last_clients_array[last_clients_array.length-1] ) {// If the message is the current count + 1...
       count++
       last_clients_array.push(member.user.id)
-      
-      
-      if (timeout) client.clearTimeout(timeout)// Remove any existing timeout to count
-      timeout = client.setTimeout(// Add a new timeout
-        () => channel.send(++count).catch(console.error),// This will make the bot count and log all errors
-        30000// after 30 seconds
-      )
     } else {
       var unique = last_clients_array.slice(last_clients_array.length-20,last_clients_array.length).filter(onlyUnique);
-
       unique.forEach( (item, i, self) => self[i] = '<@item>');
       
-      channel.send(`${member} lixou a contagem, estás a dever jolas aos seguintes membros:`).catch(console.error)
+      channel.send(`${member} lixou a contagem, estás a dever jolas aos seguintes membros:${unique.toString()}`).catch(console.error)
 
       count = 0
-      
-
-      if (timeout) client.clearTimeout(timeout)// Reset any existing timeout because the bot has counted so it doesn't need to
+      const records = [
+        {id_jogo: 'Bob',  date: new Date().toISOString().slice(0,19), loser:member.user.id, debt:unique}
+      ];
+      csvWriter.writeRecords(records)       // returns a promise
+       .then(() => {
+        console.log('...Done');
+      });
     }
   }
 })
@@ -55,3 +62,12 @@ client.on('message', ({channel, content, member}) => {
 function onlyUnique(value, index, self) {
   return self.indexOf(value) === index;
 }
+
+
+
+
+
+
+
+
+

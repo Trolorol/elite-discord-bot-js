@@ -47,6 +47,8 @@ client.on('ready', () =>{
                 
                 msg.channel.send(result);
             }
+        } else if (channel.id === client.channels.cache.find(r=>{r.name == 'counting'}).keys()[0] && !isNaN(Number(msg.content))) {
+            result = counting.execute(msg, msg.channel, msg.member, args, client);
         }
     });
 });
