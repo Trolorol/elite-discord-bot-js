@@ -9,10 +9,17 @@ module.exports = {
     argsDescription: {},
     execute(message, channel, member, args, client, result) {
         let foodlist = []
+        let mention = args.shift();
+
         fs.createReadStream('./database/comida.csv')
         .pipe(csv())
         .on('data', (row) => {
-            foodlist.push(row["Comida"]);
+            
+            if(mention!=""){
+                foodlist.push(row["Comida_Mention"].replace("[1]",mention));
+            }else{
+                foodlist.push(row["Comida"]);
+            }
         })
         .on('end', () => {
             let count =Math.trunc(Math.random()*foodlist.length);
