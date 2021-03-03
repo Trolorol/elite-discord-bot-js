@@ -1,4 +1,3 @@
-const csv = require('csv-parser');
 const fs = require('fs');
 
 module.exports = {
@@ -8,24 +7,15 @@ module.exports = {
     description: 'Responds with a food',
     argsDescription: {},
     execute(message, channel, member, args, client, result) {
-        let foodlist = []
-        let mention = args.shift();
 
-        fs.createReadStream('./database/comida.csv')
-        .pipe(csv())
-        .on('data', (row) => {
-            
-            if(mention!=""){
-                foodlist.push(row["Comida_Mention"].replace("[1]",mention));
+        let mention = args.shift();
+        let count =Math.trunc(Math.random()*client.database["comida"].length);
+            if(mention!="" && typeof mention != "undefined"){
+
+                return client.database["comida"][count]["Comida_Mention"].replace("[1]",mention);
             }else{
-                foodlist.push(row["Comida"]);
+                return client.database["comida"][count]["Comida"].replace("[1]",mention);
             }
-        })
-        .on('end', () => {
-            let count =Math.trunc(Math.random()*foodlist.length);
-            message.channel.send(foodlist[count]);
-        });
-        return "";
     }
 }
 
