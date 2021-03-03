@@ -26,33 +26,32 @@ client.on('message', ({channel, content, member}) => {
   // could use this line:
   // if (client.channels.cache.filter(c => c.name === 'counting').keyArray().includes(channel.id))
   if (channel.id === client.channels.cache.find(r=>{r.name == 'counting'}).keys()[0]) {
-    // You can ignore all bot messages like this
-    if (member.user.bot) return
-    
+        
     if (Number(content) === count + 1 && typeof last_clients_array != 'undefined' && member.user.id != last_clients_array[last_clients_array.length-1] ) {// If the message is the current count + 1...
       count++
       last_clients_array.push(member.user.id)
       
-      // Remove any existing timeout to count
-      if (timeout) client.clearTimeout(timeout)
-      // Add a new timeout
-      timeout = client.setTimeout(
-        // This will make the bot count and log all errors
-        () => channel.send(++count).catch(console.error),
-        // after 30 seconds
-        30000
+      
+      if (timeout) client.clearTimeout(timeout)// Remove any existing timeout to count
+      timeout = client.setTimeout(// Add a new timeout
+        () => channel.send(++count).catch(console.error),// This will make the bot count and log all errors
+        30000// after 30 seconds
       )
-    // If the message wasn't sent by the bot...
-    } else if (member.id !== client.user.id) {
-      // ...send a message because the person stuffed up the counting (and log all errors)
-      channel.send(`${member} messed up!`).catch(console.error)
-      // Reset the count
+    } else {
+      var unique = last_clients_array.slice(last_clients_array.length-20,last_clients_array.length).filter(onlyUnique);
+
+      unique.forEach( (item, i, self) => self[i] = '<@item>');
+      
+      channel.send(`${member} lixou a contagem, estás a dever jolas aos seguintes membros:`).catch(console.error)
+
       count = 0
-      // Reset any existing timeout because the bot has counted so it doesn't need to
-      // count again
-      if (timeout) client.clearTimeout(timeout)
+      
+
+      if (timeout) client.clearTimeout(timeout)// Reset any existing timeout because the bot has counted so it doesn't need to
     }
   }
 })
 
-client.login('your token')
+function onlyUnique(value, index, self) {
+  return self.indexOf(value) === index;
+}
