@@ -2,12 +2,12 @@ const Discord = require('discord.js');
 const dotenv = require('dotenv').config();
 const config = require('./config.json');
 const fs = require('fs');
-
+const csv = require('csv-parser');
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
 
 client.env={
-    "PREFIX":"--",
+    "PREFIX":"%",
     "TESTE_CATEGORY_ID":'815064384010453014',
     "CONVIVIO_VOICE_CHANNEL_ID":"521629727136546817",
     "tempchannel":[],
@@ -18,6 +18,18 @@ const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith(
 for (const file of commandFiles) {
   const command = require(`./commands/${file}`);
   client.commands.set(command.name.toLowerCase(), command);
+}
+
+client.database = {}
+const databaseFiles = fs.readdirSync('./database/').filter(file => file.endsWith(".csv"));
+for (const file of databaseFiles) {
+    fs.createReadStream("./database/"+file).pipe(csv())
+    .on('data', (row) => {
+        if(typeof client.database[file.split(".")[0]] == "undefined"){
+            client.database[file.split(".")[0]]=[];
+        }
+        client.database[file.split(".")[0]].push(row);
+    });
 }
 
 client.once('ready', () => {
@@ -32,7 +44,7 @@ client.on('ready', () =>{
             const args = msg.content.slice(client.env["PREFIX"].length).split(/ +/);
             const commandName = args.shift().toLowerCase();
             const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
-            var result;
+            var result = "";
             if (command != undefined) {
                 try {
                      result = command.execute(msg, msg.channel, msg.member, args, client, result);
