@@ -4,6 +4,7 @@ const config = require('./config.json');
 const fs = require('fs');
 const csv = require('csv-parser');
 const client = new Discord.Client();
+const counting_game = require('./commands/counting.js')
 client.commands = new Discord.Collection();
 
 client.env={
@@ -11,7 +12,10 @@ client.env={
     "TESTE_CATEGORY_ID":'815064384010453014',
     "CONVIVIO_VOICE_CHANNEL_ID":"521629727136546817",
     "tempchannel":[],
-    "connectedusers":[]
+    "connectedusers":[],
+    "count_room_id":0,
+    "count":0,
+    "last_clients_array":[]
 }
 
 const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith(".js"));
@@ -40,6 +44,8 @@ client.once('ready', () => {
 client.on('ready', () =>{
     
     client.on('message', (msg) => {
+        if (msg.author.bot) return;
+        console.log(Number.isInteger(+msg.content))
         if(msg.content.startsWith(client.env["PREFIX"])){
             const args = msg.content.slice(client.env["PREFIX"].length).split(/ +/);
             const commandName = args.shift().toLowerCase();
@@ -52,13 +58,18 @@ client.on('ready', () =>{
                     console.log("Command "+commandName+" failed to execute due to:" + error);
                 }
             } else {
-                //games / other commands
+                 result = 'Command not found'
             }
           
             if(result !=""){
                 
                 msg.channel.send(result);
             }
+            
+        } else if (Number.isInteger(+msg.content) && client.env.count_room_id == msg.channel.id) {
+            console.log("Entrei no counting")
+            console.log(msg.content)
+            counting_game.countingGame(msg.channel, msg, msg.member, client)
         }
     });
 });

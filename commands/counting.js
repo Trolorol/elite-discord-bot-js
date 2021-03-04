@@ -1,54 +1,58 @@
+const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 module.exports = {
     name: 'counting',
     aliases: [],
     execute(message, channel, member, args, client, result) {
-      game(channel, message, member) ;
-        return "blabla";
-    }
+        return'';
+    },
 
-}
 
-//message objeto toal 
-//args array de argumentos depois do comando 
-// client bot object 
-// result 
 
-function countingGame(channel, message, member) {
-  let count = 0
-  let max_counting = []
-  let last_clients_array = []
-  let timeout;
+countingGame(channel, message, member, client) {
+
   // Only do this for the counting channel of course
   // If you want to simply make this work for all channels called 'counting', you
   // could use this line:
   // if (client.channels.cache.filter(c => c.name === 'counting').keyArray().includes(channel.id))
-  if (channel.id === client.channels.cache.find(r=>{r.name == 'counting'}).keys()[0]) {
-        
-    if (Number(message.content) === count + 1 && typeof last_clients_array != 'undefined' && member.user.id != last_clients_array[last_clients_array.length-1] ) {// If the message is the current count + 1...
-      count++
-      last_clients_array.push(member.user.id)
-      
-      
-      if (timeout) client.clearTimeout(timeout)// Remove any existing timeout to count
-      timeout = client.setTimeout(// Add a new timeout
-        () => channel.send(++count).catch(console.error),// This will make the bot count and log all errors
-        30000// after 30 seconds
-      )
+  if (channel.id === client.env.count_room_id) {
+
+    if (Number(+message.content) === client.env.count + 1 && typeof client.env.last_clients_array != 'undefined' && member.user.id != client.env.last_clients_array[client.env.last_clients_array.length-1] ) {// If the message is the current count + 1...
+      client.env.count++
+      client.env.last_clients_array.push(member.user.id)
+      message.react('✅')
+
     } else {
-      var unique = last_clients_array.slice(last_clients_array.length-20,last_clients_array.length).filter(onlyUnique);
+      var unique = client.env.last_clients_array.slice(((client.env.last_clients_array.length-20<0)?0:client.env.last_clients_array.length-20),client.env.last_clients_array.length).filter(this.onlyUnique).filter(r => r!=member.user.id)
+      unique.forEach( (item, i, self) => self[i] = `<@${item}>`);
 
-      unique.forEach( (item, i, self) => self[i] = '<@item>');
-      
-      channel.send(`${member} lixou a contagem, estás a dever jolas aos seguintes membros:`).catch(console.error)
-
-      count = 0
-      
-
-      if (timeout) client.clearTimeout(timeout)// Reset any existing timeout because the bot has counted so it doesn't need to
+      message.react('🤬')
+      if (unique.length==0){
+        channel.send(`${member} lixou a contagem, não há ninguem para pagar jolas, estás mesmo a tentar jogar sozinho?`)
+      }else{
+        channel.send(`${member} lixou a contagem, estás a dever jolas aos seguintes membros:${unique.toString()}`).catch(console.error)
+      }
+      client.env.count = 0
+      client.env.last_clients_array = []
+      const records = [
+        {date: new Date().toISOString().slice(0,19), loser:member.user.id, debt:JSON.stringify(unique)}
+      ];
+      const csvWriter = createCsvWriter({
+        path: './database/count.csv',
+        header: [
+            {id: 'date', title:'Data'},
+            {id: 'loser', title: 'Perdedor'},
+            {id: 'debt', title: 'Dividas'},
+        ],
+        append:true
+      });
+      csvWriter.writeRecords(records) // returns a promise
     }
   }
+},
+
+ onlyUnique(value, index, self) {
+  return self.indexOf(value) === index;
 }
 
-function onlyUnique(value, index, self) {
-  return self.indexOf(value) === index;
+
 }
