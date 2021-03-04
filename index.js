@@ -8,14 +8,15 @@ const counting_game = require('./commands/counting.js')
 client.commands = new Discord.Collection();
 
 client.env={
-    PREFIX:"%",
+    PREFIX:"$",
     TESTE_CATEGORY_ID:'815064384010453014',
     CONVIVIO_VOICE_CHANNEL_ID:"521629727136546817",
     tempchannel:[],
     connectedusers:[],
     count_room_id:0,
     count:0,
-    last_clients_array:[]
+    last_clients_array:[],
+    testes_folder:'https://mega.nz/folder/xfIHzQjA#PzZk1nD2Ew2jJ7KNQ8_oTw'
 }
 
 const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith(".js"));

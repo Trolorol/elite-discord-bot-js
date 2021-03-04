@@ -11,5 +11,8 @@ module.exports = {
     },
     mention(userId){
         return "<@"+userId+">"
+    },
+    quote(text){
+        return "```"+text+"```"
     }
 }

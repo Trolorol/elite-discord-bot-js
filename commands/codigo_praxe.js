@@ -2,10 +2,12 @@ const fs = require('fs');
 const {  MessageAttachment } = require('discord.js');
 module.exports = {
     name: 'codigo',
-    args: '[numero de artigo]',
+    args: '[numeroDeArtigo]',
     aliases: [],
     description: 'Responds with the codigo article, if no number is provided then a pdf is downloaded',
-    argsDescription: {},
+    argsDescription: {
+        '[numeroDeArtigo]':"Número do Artigo (opcional)"
+    },
     execute(message, channel, member, args, client, result) {
 
         let article = args.shift();
