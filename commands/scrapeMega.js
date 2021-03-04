@@ -1,6 +1,6 @@
 const mega = require('megajs');
 const hlp = require('../helper/helper.js');
-
+const Discord = require('discord.js');
 module.exports = {
     name: 'testestree',
     args: '[path]',
@@ -16,9 +16,7 @@ module.exports = {
             if(typeof path == "undefined"){
                 let result = "";
                 result += loadTreeChildren(client,folder,0,false);
-                channel.send("Showing file tree for testes folder" + "\n");
-                channel.send(result);
-                
+                channel.send(embedMessage(result,"Showing file tree for testes folder"));
             }else{
                 pathArgs = path.toString().split("/");
                 pathArgs.shift();
@@ -26,9 +24,8 @@ module.exports = {
                 if(goToFolderByPathResult[0]){
                     let result = "";
                     result += loadTreeChildren(client,goToFolderByPathResult[1],0,false);
-                    channel.send("Showing file tree for "+goToFolderByPathResult[1].name+" folder" + "\n");
-                    channel.send(result);
-                
+                    channel.send(embedMessage(result,"Showing file tree for "+goToFolderByPathResult[1].name+" folder"));
+                    
                 }else{
                     channel.send(goToFolderByPathResult[1]);
                 }
@@ -38,10 +35,10 @@ module.exports = {
     }
 }
 
-function loadTreeChildren(client,folder,depth,isLast=false,maxDepth=4){
+function loadTreeChildren(client,folder,depth,isLast=false,maxDepth=2){
     let result ="";
     if(folder.directory){
-        result = "  ".repeat(depth)+ "└►["+folder.name+"]("+client.env.testes_folder+"/folder/"+folder.downloadId[1]+")/";
+        result = "⠀    ".repeat(depth)+ "└►["+folder.name+"]("+client.env.testes_folder+"/folder/"+folder.downloadId[1]+")/";
         if(typeof folder.children != "undefined"){
             
             if(maxDepth<=depth+1) return result + "(...)\n"
@@ -53,7 +50,7 @@ function loadTreeChildren(client,folder,depth,isLast=false,maxDepth=4){
             result += "(Empty)\n";
         }
     }else{
-        return "  ".repeat(depth)+"└►["+folder.name+"]("+client.env.testes_folder+"/file/"+folder.downloadId[1]+")\n";
+        return "⠀    ".repeat(depth)+"└►["+folder.name+"]("+client.env.testes_folder+"/file/"+folder.downloadId[1]+") \n";
     }
     return result;
 }
@@ -90,3 +87,14 @@ function goToFolderByPath(folder,path){
 }
 
 
+function embedMessage(result, title){
+    console.log(title)
+    console.log(result)
+    const embed= new Discord.MessageEmbed()
+	.setColor('#0099ff')
+	.setTitle(title.substring(0,256))
+    .setDescription(result.substring(0,2048))
+    .setFooter(result.substring(2048,2048+2048))
+    console.log(embed);
+    return embed;
+}
