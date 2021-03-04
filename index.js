@@ -1,6 +1,5 @@
+require('dotenv').config(); // loads .env into process.env
 const Discord = require('discord.js');
-const dotenv = require('dotenv').config();
-const config = require('./config.json');
 const fs = require('fs');
 const csv = require('csv-parser');
 const client = new Discord.Client();
@@ -45,7 +44,7 @@ client.on('ready', () =>{
     
     client.on('message', (msg) => {
         if (msg.author.bot) return;
-        console.log(Number.isInteger(+msg.content))
+        
         if(msg.content.startsWith(client.env["PREFIX"])){
             const args = msg.content.slice(client.env["PREFIX"].length).split(/ +/);
             const commandName = args.shift().toLowerCase();
@@ -55,12 +54,16 @@ client.on('ready', () =>{
                 try {
                     if(typeof command.executionPermittedRoles !="undefined"){
                         let hasRolePermission = false;
-                        command.executionPermittedRoles.forEach(element => {if(msg.member.roles.cache.has(element)){hasRolePermission=true;}});
-
+                        command.executionPermittedRoles.forEach(element => { 
+                            if(msg.member.roles.cache.some(role => role.name === element))
+                                {hasRolePermission=true;}
+                        });
+                        
                         if(hasRolePermission){
                             result = command.execute(msg, msg.channel, msg.member, args, client, result);
                         }else{
-                            result = ":x: You don't have the necessary role to use this command"
+                            reations = [":pepeno: ",":BlobCouncil:",":pepesad:",":pepcry:",":PepeRain:"]
+                            result = "You don't have the necessary role to use this command"
                         }
                     }else{
                         result = command.execute(msg, msg.channel, msg.member, args, client, result);
@@ -79,8 +82,6 @@ client.on('ready', () =>{
             }
             
         } else if (Number.isInteger(+msg.content) && client.env.count_room_id == msg.channel.id) {
-            console.log("Entrei no counting")
-            console.log(msg.content)
             counting_game.countingGame(msg.channel, msg, msg.member, client)
         }
     });
