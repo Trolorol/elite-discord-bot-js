@@ -53,12 +53,24 @@ client.on('ready', () =>{
             var result = "";
             if (command != undefined) {
                 try {
-                     result = command.execute(msg, msg.channel, msg.member, args, client, result);
+                    if(typeof command.executionPermittedRoles !="undefined"){
+                        let hasRolePermission = false;
+                        command.executionPermittedRoles.forEach(element => {if(msg.member.roles.cache.has(element)){hasRolePermission=true;}});
+
+                        if(hasRolePermission){
+                            result = command.execute(msg, msg.channel, msg.member, args, client, result);
+                        }else{
+                            result = ":x: You don't have the necessary role to use this command"
+                        }
+                    }else{
+                        result = command.execute(msg, msg.channel, msg.member, args, client, result);
+                    }
+                    
                 } catch (error) {
-                    console.log("Command "+commandName+" failed to execute due to:" + error);
+                    result = ("Command "+commandName+" failed to execute due to:" + error);
                 }
             } else {
-                 result = 'Command not found'
+                 result = 'Command not found';
             }
           
             if(result !=""){
