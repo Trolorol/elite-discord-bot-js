@@ -1,6 +1,6 @@
+require('dotenv').config(); // loads .env into process.env
 const Discord = require('discord.js');
-const dotenv = require('dotenv').config();
-const config = require('./config.json');
+const hlp = require('./helper/helper.js');
 const fs = require('fs');
 const csv = require('csv-parser');
 const client = new Discord.Client();
@@ -8,14 +8,15 @@ const counting_game = require('./commands/counting.js')
 client.commands = new Discord.Collection();
 
 client.env={
-    "PREFIX":"%",
-    "TESTE_CATEGORY_ID":'815064384010453014',
-    "CONVIVIO_VOICE_CHANNEL_ID":"521629727136546817",
-    "tempchannel":[],
-    "connectedusers":[],
-    "count_room_id":0,
-    "count":0,
-    "last_clients_array":[]
+    PREFIX:"$",
+    TESTE_CATEGORY_ID:'815064384010453014',
+    CONVIVIO_VOICE_CHANNEL_ID:"521629727136546817",
+    tempchannel:[],
+    connectedusers:[],
+    count_room_id:0,
+    count:0,
+    last_clients_array:[],
+    testes_folder:'https://mega.nz/folder/xfIHzQjA#PzZk1nD2Ew2jJ7KNQ8_oTw'
 }
 
 const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith(".js"));
@@ -45,20 +46,37 @@ client.on('ready', () =>{
     
     client.on('message', (msg) => {
         if (msg.author.bot) return;
-        console.log(Number.isInteger(+msg.content))
-        if(msg.content.startsWith(client.env["PREFIX"])){
-            const args = msg.content.slice(client.env["PREFIX"].length).split(/ +/);
+        
+        if(msg.content.startsWith(client.env.PREFIX)){
+            const args = msg.content.slice(client.env.PREFIX.length).split(/ +/);
             const commandName = args.shift().toLowerCase();
             const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
             var result = "";
             if (command != undefined) {
                 try {
-                     result = command.execute(msg, msg.channel, msg.member, args, client, result);
+                    if(typeof command.executionPermittedRoles !="undefined"){
+                        let hasRolePermission = false;
+                        command.executionPermittedRoles.forEach(element => { 
+                            if(msg.member.roles.cache.some(role => role.name === element))
+                                {hasRolePermission=true;}
+                        });
+                        
+                        if(hasRolePermission){
+                            result = command.execute(msg, msg.channel, msg.member, args, client, result);
+                        }else{
+                            reactions = [":pepeno: ",":BlobCouncil:",":pepesad:",":pepcry:",":PepeRain:"]
+                            
+                            result = hlp.nextRandom(reactions)+"You don't have the necessary role to use this command"
+                        }
+                    }else{
+                        result = command.execute(msg, msg.channel, msg.member, args, client, result);
+                    }
+                    
                 } catch (error) {
-                    console.log("Command "+commandName+" failed to execute due to:" + error);
+                    result = ("Command "+commandName+" failed to execute due to:" + error);
                 }
             } else {
-                 result = 'Command not found'
+                 result = 'Command not found';
             }
           
             if(result !=""){
@@ -67,8 +85,6 @@ client.on('ready', () =>{
             }
             
         } else if (Number.isInteger(+msg.content) && client.env.count_room_id == msg.channel.id) {
-            console.log("Entrei no counting")
-            console.log(msg.content)
             counting_game.countingGame(msg.channel, msg, msg.member, client)
         }
     });

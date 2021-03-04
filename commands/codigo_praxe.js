@@ -2,19 +2,19 @@ const fs = require('fs');
 const {  MessageAttachment } = require('discord.js');
 module.exports = {
     name: 'codigo',
-    args: '[numero de artigo]',
+    args: '[numeroDeArtigo]',
     aliases: [],
     description: 'Responds with the codigo article, if no number is provided then a pdf is downloaded',
-    argsDescription: {},
+    argsDescription: {
+        '[numeroDeArtigo]':"Número do Artigo (opcional)"
+    },
     execute(message, channel, member, args, client, result) {
 
         let article = args.shift();
             if(article!="" && typeof article != "undefined" && article > 0){
-                console.log(client.database["codigo_da_praxe"]);
-                return "**Mostrando o codigo da praxe: \n Artigo "+article +"**\n"+client.database["codigo_da_praxe"][article-1]["Artigo"];
+                return "**Mostrando o codigo da praxe: \n Artigo "+article +"**\n"+client.database.codigo_da_praxe[article-1].Artigo;
             }else{
-                
-                message.channel.send(new MessageAttachment('./files/Codigo_da_Praxe.pdf', 'codigo.pdf')).catch(console.error);
+                message.channel.send(new MessageAttachment('./files/Codigo_da_Praxe.pdf', 'codigo.pdf')).catch((error)=>{message.channel.send(`Error sending file: ${error}`)});
                 return "";
             }
     }

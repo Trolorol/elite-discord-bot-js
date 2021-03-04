@@ -1,5 +1,5 @@
 const fs = require('fs');
-
+const hlp = require('../helper/helper.js');
 module.exports = {
     name: 'comida',
     args: '',
@@ -9,12 +9,12 @@ module.exports = {
     execute(message, channel, member, args, client, result) {
 
         let mention = args.shift();
-        let count =Math.trunc(Math.random()*client.database["comida"].length);
+        
             if(mention!="" && typeof mention != "undefined"){
 
-                return client.database["comida"][count]["Comida_Mention"].replace("[1]",mention);
+                return hlp.nextRandom(client.database.comida).Comida_Mention.replace("[1]",mention);
             }else{
-                return client.database["comida"][count]["Comida"].replace("[1]",mention);
+                return hlp.nextRandom(client.database.comida).Comida.replace("[1]",mention);
             }
     }
 }

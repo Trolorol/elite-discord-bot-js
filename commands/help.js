@@ -13,7 +13,7 @@ module.exports = {
             const commandshelp = "";
             let iter = client.commands.size;
             for (const [name, command] of client.commands) {
-                result += (((!--iter) ? "└► " : "├► ") + commandshelp + "**"+client.env["PREFIX"]+name + "** " + command.args + " : " + command.description) + "\n";
+                result += (((!--iter) ? "└► " : "├► ") + commandshelp + "**"+client.env.PREFIX+name + "** " + command.args + " : " + command.description) + "\n";
             }
         } else {
             firstArgs = firstArgs.toLowerCase();

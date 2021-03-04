@@ -7,6 +7,6 @@ module.exports = {
     argsDescription: {},
 
   execute(message, channel, member, args, client, result) {
-    return 'https://mega.nz/folder/xfIHzQjA#PzZk1nD2Ew2jJ7KNQ8_oTw';
+    return client.env.testes_folder;
   },
 };

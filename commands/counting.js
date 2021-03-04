@@ -1,10 +1,15 @@
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+const hlp = require('../helper/helper.js');
 module.exports = {
-    name: 'counting',
-    aliases: [],
-    execute(message, channel, member, args, client, result) {
-        return'';
-    },
+  name: 'scr',
+  args: '',
+  aliases: [],
+  description: 'Sets the channel as counting room',
+  argsDescription: {},
+  execute(message, channel, member, args, client, result) {
+      client.env.count_room_id = channel.id
+      return 'Channel set as counting room'
+  },
 
 
 
@@ -23,13 +28,13 @@ countingGame(channel, message, member, client) {
 
     } else {
       var unique = client.env.last_clients_array.slice(((client.env.last_clients_array.length-20<0)?0:client.env.last_clients_array.length-20),client.env.last_clients_array.length).filter(this.onlyUnique).filter(r => r!=member.user.id)
-      unique.forEach( (item, i, self) => self[i] = `<@${item}>`);
+      unique.forEach( (item, i, self) => self[i] = hlp.mention(item));
 
       message.react('🤬')
       if (unique.length==0){
         channel.send(`${member} lixou a contagem, não há ninguem para pagar jolas, estás mesmo a tentar jogar sozinho?`)
       }else{
-        channel.send(`${member} lixou a contagem, estás a dever jolas aos seguintes membros:${unique.toString()}`).catch(console.error)
+        channel.send(`${member} lixou a contagem, estás a dever jolas aos seguintes membros: ${unique.toString()}`).catch(console.error)
       }
       client.env.count = 0
       client.env.last_clients_array = []
