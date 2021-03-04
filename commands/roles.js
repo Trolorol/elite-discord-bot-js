@@ -4,7 +4,7 @@ module.exports = {
     aliases: [],
     description: 'Responds with roles and their ids, if a user is specified, then returns the roles that the user has ',
     argsDescription: {},
-    executionPermittedRoles : ["Admin"],
+    executionPermittedRoles : ["Admin","Elite Bot Project Developer"],
     execute(message, channel, member, args, client, result) {
         const userMention = args.shift();
         let roles = "";

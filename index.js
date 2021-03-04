@@ -1,5 +1,6 @@
 require('dotenv').config(); // loads .env into process.env
 const Discord = require('discord.js');
+const hlp = require('./helper/helper.js');
 const fs = require('fs');
 const csv = require('csv-parser');
 const client = new Discord.Client();
@@ -7,14 +8,14 @@ const counting_game = require('./commands/counting.js')
 client.commands = new Discord.Collection();
 
 client.env={
-    "PREFIX":"%",
-    "TESTE_CATEGORY_ID":'815064384010453014',
-    "CONVIVIO_VOICE_CHANNEL_ID":"521629727136546817",
-    "tempchannel":[],
-    "connectedusers":[],
-    "count_room_id":0,
-    "count":0,
-    "last_clients_array":[]
+    PREFIX:"%",
+    TESTE_CATEGORY_ID:'815064384010453014',
+    CONVIVIO_VOICE_CHANNEL_ID:"521629727136546817",
+    tempchannel:[],
+    connectedusers:[],
+    count_room_id:0,
+    count:0,
+    last_clients_array:[]
 }
 
 const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith(".js"));
@@ -45,8 +46,8 @@ client.on('ready', () =>{
     client.on('message', (msg) => {
         if (msg.author.bot) return;
         
-        if(msg.content.startsWith(client.env["PREFIX"])){
-            const args = msg.content.slice(client.env["PREFIX"].length).split(/ +/);
+        if(msg.content.startsWith(client.env.PREFIX)){
+            const args = msg.content.slice(client.env.PREFIX.length).split(/ +/);
             const commandName = args.shift().toLowerCase();
             const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
             var result = "";
@@ -62,8 +63,9 @@ client.on('ready', () =>{
                         if(hasRolePermission){
                             result = command.execute(msg, msg.channel, msg.member, args, client, result);
                         }else{
-                            reations = [":pepeno: ",":BlobCouncil:",":pepesad:",":pepcry:",":PepeRain:"]
-                            result = "You don't have the necessary role to use this command"
+                            reactions = [":pepeno: ",":BlobCouncil:",":pepesad:",":pepcry:",":PepeRain:"]
+                            
+                            result = hlp.nextRandom(reactions)+"You don't have the necessary role to use this command"
                         }
                     }else{
                         result = command.execute(msg, msg.channel, msg.member, args, client, result);
