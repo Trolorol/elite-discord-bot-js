@@ -24,7 +24,10 @@ module.exports = {
                 if(goToFolderByPathResult[0]){
                     let result = "";
                     result += loadTreeChildren(client,goToFolderByPathResult[1],0,false);
-                    channel.send(embedMessage(result,"Showing file tree for "+goToFolderByPathResult[1].name+" folder"));
+                    let embeds=hlp.simpleEmbedMessage(result,"Showing file tree for "+goToFolderByPathResult[1].name+" folder");
+                    embeds.forEach((element)=>{
+                        channel.send(element);
+                    });
                     
                 }else{
                     channel.send(goToFolderByPathResult[1]);
@@ -35,7 +38,7 @@ module.exports = {
     }
 }
 
-function loadTreeChildren(client,folder,depth,isLast=false,maxDepth=2){
+function loadTreeChildren(client,folder,depth,isLast=false,maxDepth=4){
     let result ="";
     if(folder.directory){
         result = "⠀    ".repeat(depth)+ "└►["+folder.name+"]("+client.env.testes_folder+"/folder/"+folder.downloadId[1]+")/";
@@ -87,14 +90,3 @@ function goToFolderByPath(folder,path){
 }
 
 
-function embedMessage(result, title){
-    console.log(title)
-    console.log(result)
-    const embed= new Discord.MessageEmbed()
-	.setColor('#0099ff')
-	.setTitle(title.substring(0,256))
-    .setDescription(result.substring(0,2048))
-    .setFooter(result.substring(2048,2048+2048))
-    console.log(embed);
-    return embed;
-}
