@@ -1,0 +1,2 @@
+scrapper de portal de emprego, dá um link de emprego e diz as especificações - %arranjemumavida
+guardar os connections dos membros - %addcon [user] [type] [nick] e %remcon [user] [type]

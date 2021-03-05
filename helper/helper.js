@@ -48,5 +48,11 @@ module.exports = {
             }
         });
         return embeds;
+    },
+    isUndefined(value){
+        return typeof value=="undefined";
+    },
+    isNotUndefined(value){
+        return typeof value!="undefined";
     }
 }

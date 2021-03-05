@@ -22,7 +22,7 @@ client.env={
 const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith(".js"));
 for (const file of commandFiles) {
   const command = require(`./commands/${file}`);
-  client.commands.set(command.name.toLowerCase(), command);
+  if(hlp.isNotUndefined(command.name)){client.commands.set(command.name.toLowerCase(), command)};
 }
 
 client.database = {}
@@ -30,7 +30,7 @@ const databaseFiles = fs.readdirSync('./database/').filter(file => file.endsWith
 for (const file of databaseFiles) {
     fs.createReadStream("./database/"+file).pipe(csv())
     .on('data', (row) => {
-        if(typeof client.database[file.split(".")[0]] == "undefined"){
+        if(hlp.isUndefined(client.database[file.split(".")[0]])){
             client.database[file.split(".")[0]]=[];
         }
         client.database[file.split(".")[0]].push(row);
@@ -52,9 +52,9 @@ client.on('ready', () =>{
             const commandName = args.shift().toLowerCase();
             const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
             var result = "";
-            if (command != undefined) {
+            if (hlp.isNotUndefined(command)) {
                 try {
-                    if(typeof command.executionPermittedRoles !="undefined"){
+                    if(hlp.isNotUndefined(command.executionPermittedRoles)){
                         let hasRolePermission = false;
                         command.executionPermittedRoles.forEach(element => { 
                             if(msg.member.roles.cache.some(role => role.name === element))
