@@ -16,19 +16,19 @@ module.exports = {
             if(typeof path == "undefined"){
                 let result = "";
                 result += loadTreeChildren(client,folder,0,false);
-                channel.send("Showing file tree for testes folder" + "\n");
-                channel.send(result);
-                
+                channel.send(embedMessage(result,"Showing file tree for testes folder"));
             }else{
-                pathArgs = path.toString().split("/");
+                pathArgs = path.toString().replace(/\/$/, '').split("/");
                 pathArgs.shift();
                 const goToFolderByPathResult = goToFolderByPath(folder,pathArgs);
                 if(goToFolderByPathResult[0]){
                     let result = "";
                     result += loadTreeChildren(client,goToFolderByPathResult[1],0,false);
-                    channel.send("Showing file tree for "+goToFolderByPathResult[1].name+" folder" + "\n");
-                    channel.send(result);
-                
+                    let embeds=hlp.simpleEmbedMessage(result,"Showing file tree for "+goToFolderByPathResult[1].name+" folder");
+                    embeds.forEach((element)=>{
+                        channel.send(element);
+                    });
+                    
                 }else{
                     channel.send(goToFolderByPathResult[1]);
                 }
@@ -41,7 +41,7 @@ module.exports = {
 function loadTreeChildren(client,folder,depth,isLast=false,maxDepth=4){
     let result ="";
     if(folder.directory){
-        result = "  ".repeat(depth)+ "└►["+folder.name+"]("+client.env.testes_folder+"/folder/"+folder.downloadId[1]+")/";
+        result = "⠀    ".repeat(depth)+ "└►["+folder.name+"]("+client.env.testes_folder+"/folder/"+folder.downloadId[1]+")/";
         if(typeof folder.children != "undefined"){
             
             if(maxDepth<=depth+1) return result + "(...)\n"
@@ -53,7 +53,7 @@ function loadTreeChildren(client,folder,depth,isLast=false,maxDepth=4){
             result += "(Empty)\n";
         }
     }else{
-        return "  ".repeat(depth)+"└►["+folder.name+"]("+client.env.testes_folder+"/file/"+folder.downloadId[1]+")\n";
+        return "⠀    ".repeat(depth)+"└►["+folder.name+"]("+client.env.testes_folder+"/file/"+folder.downloadId[1]+") \n";
     }
     return result;
 }

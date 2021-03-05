@@ -6,6 +6,7 @@ module.exports = {
   aliases: [],
   description: 'Sets the channel as counting room',
   argsDescription: {},
+  executionPermittedRoles : ["Admin","Elite Bot Project Developer"],
   execute(message, channel, member, args, client, result) {
       client.env.count_room_id = channel.id
       return 'Channel set as counting room'
