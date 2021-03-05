@@ -1,6 +1,6 @@
 const mega = require('megajs');
 const hlp = require('../helper/helper.js');
-const Discord = require('discord.js');
+
 module.exports = {
     name: 'testestree',
     args: '[path]',
@@ -18,7 +18,7 @@ module.exports = {
                 result += loadTreeChildren(client,folder,0,false);
                 channel.send(embedMessage(result,"Showing file tree for testes folder"));
             }else{
-                pathArgs = path.toString().split("/");
+                pathArgs = path.toString().replace(/\/$/, '').split("/");
                 pathArgs.shift();
                 const goToFolderByPathResult = goToFolderByPath(folder,pathArgs);
                 if(goToFolderByPathResult[0]){
