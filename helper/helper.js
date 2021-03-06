@@ -16,20 +16,7 @@ module.exports = {
         return "```"+text+"```"
     },
     simpleEmbedMessage(result, title){
-        let phrases = result.split("\n");
-        let embeds=[];
-        let condensedPhrases = []
-        let i = 0
-        phrases.forEach((value,index) => {
-            if(typeof condensedPhrases[i] == "undefined"){
-                condensedPhrases[i]=value+"\n";
-            }else if(condensedPhrases[i].concat(value).length>=2000){
-                i++;
-                condensedPhrases[i]=value+"\n";
-            }else{
-                condensedPhrases[i]+=value+"\n";
-            }
-        });
+        let condensedPhrases = seperateResultBySize(result);
         condensedPhrases.forEach(
             (value,index) => {
             if(value!=""){
@@ -49,10 +36,31 @@ module.exports = {
         });
         return embeds;
     },
+    seperateResultIntoWritableArray(result){
+        let phrases = result.split("\n");
+        let condensedPhrases = []
+        let i = 0
+        phrases.forEach((value,index) => {
+            if(typeof condensedPhrases[i] == "undefined"){
+                condensedPhrases[i]=value+"\n";
+            }else if(condensedPhrases[i].concat(value).length>=2000){
+                i++;
+                condensedPhrases[i]=value+"\n";
+            }else{
+                condensedPhrases[i]+=value+"\n";
+            }
+        });
+        return condensedPhrases;
+    },
     isUndefined(value){
         return typeof value=="undefined";
     },
     isNotUndefined(value){
         return typeof value!="undefined";
+    },
+    writeArrayToChannel(array,channel){
+        array.forEach((element)=>{
+            channel.send(element);
+        });
     }
 }

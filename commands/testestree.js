@@ -25,10 +25,7 @@ module.exports = {
                     let result = "";
                     result += loadTreeChildren(client,goToFolderByPathResult[1],0,false);
                     let embeds=hlp.simpleEmbedMessage(result,"Showing file tree for "+goToFolderByPathResult[1].name+" folder");
-                    embeds.forEach((element)=>{
-                        channel.send(element);
-                    });
-                    
+                    hlp.writeArrayToChannel(embeds,channel);
                 }else{
                     channel.send(goToFolderByPathResult[1]);
                 }
