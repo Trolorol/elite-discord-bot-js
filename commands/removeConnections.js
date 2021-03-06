@@ -1,0 +1,1 @@
+//remove a connection of the own user (if everyone) , remove of another user (if admin)

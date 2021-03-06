@@ -38,6 +38,7 @@ module.exports = {
                 result += ("└► Command not recognized : " + args) + "\n";
             }
         }
-        return result;
+        hlp.writeArrayToChannel(seperateResultIntoWritableArray(result),channel);
+        return "";
     }
 }
