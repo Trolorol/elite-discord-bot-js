@@ -18,6 +18,9 @@ module.exports = {
     bold(text){
         return "**"+text +"**"
     },
+    searchUser(client,userId){
+        return client.users.cache.find(user => user.id === userId);
+    },
     simpleEmbedMessage(result, title){
         let condensedPhrases = seperateResultBySize(result);
         condensedPhrases.forEach(
