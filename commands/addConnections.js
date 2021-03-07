@@ -15,37 +15,37 @@ module.exports = {
         const typeOfCon  = args.shift();
         const nickName = args.join(" ");
         const userId = message.author.id;
-        const positionOfUser = hlp.findWithAttr(client.database.connections,0,userId);
-        let arrayUser=[];
+        const positionOfUser = hlp.findWithAttr(client.database.connections,"userid",userId);
+        let jsonUser={};
         const position =arrayCons.indexOf(typeOfCon);
         if(position >0){//existing connection
             console.log(client.database.connections);
             if(positionOfUser>-1){//existing user
-                client.database.connections[positionOfUser][position] = nickName;
-                arrayUser = client.database.connections[positionOfUser];
+                client.database.connections[positionOfUser][arrayCons[position]] = nickName;
+                jsonUser = client.database.connections[positionOfUser];
             }else{//new user
-                arrayUser.push(userId);
+                jsonUser.userid=userId;
                 for (let i = 1; i < arrayCons.length; i++) {
-                    arrayUser[i] = (i==position)?nickName:"";
+                    jsonUser[arrayCons[i]] = (i==position)?nickName:"";
                 }
                 if(hlp.isUndefined(client.database.connections)){
                     client.database.connections=[];   
                 }
-                client.database.connections.push(arrayUser);
+                client.database.connections.push(jsonUser);
                 
             }
-            
-            
+            console.log(jsonUser);
             var writeStream = fs.createWriteStream("database/connections.csv");
             let stringHeader = "\""+arrayCons.join("\",\"")+"\"\n";
             let toWrite=stringHeader;
+            console.log(client.database.connections);
             client.database.connections.forEach(element => {
-                toWrite+="\""+element.join("\",\"")+"\"\n";
+                arrayCons.forEach((i,index,array)=>{toWrite+="\""+element[i]+"\""+(index==array.length-1)?"":",";});
+                toWrite+="\n";
             });
             writeStream.write(toWrite);
             
             return hlp.mention(userId)+" now has "+hlp.bold(typeOfCon) +" connection with nickname " + hlp.bold(nickName)
-           
         }else{//unknown connection
             return "No connection named :" +hlp.bold(typeOfCon)+"";
         }
