@@ -43,7 +43,7 @@ countingGame(channel, message, member, client) {
         {date: new Date().toISOString().slice(0,19), loser:member.user.id, debt:JSON.stringify(unique)}
       ];
       const csvWriter = createCsvWriter({
-        path: './database/count.csv',
+        path: 'database/count.csv',
         header: [
             {id: 'date', title:'Data'},
             {id: 'loser', title: 'Perdedor'},

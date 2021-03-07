@@ -15,6 +15,9 @@ module.exports = {
     quote(text){
         return "```"+text+"```"
     },
+    bold(text){
+        return "**"+text +"**"
+    },
     simpleEmbedMessage(result, title){
         let condensedPhrases = seperateResultBySize(result);
         condensedPhrases.forEach(
@@ -62,5 +65,15 @@ module.exports = {
         array.forEach((element)=>{
             channel.send(element);
         });
+    },
+    findWithAttr(array, attr, value) {
+        if(this.isUndefined(array)) return -1;
+        for(var i = 0; i < array.length; i += 1) {
+            console.log("comparing : "+array[i][attr]+" "+value)
+            if(array[i][attr] === value) {
+                return i;
+            }
+        }
+        return -1;
     }
 }

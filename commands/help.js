@@ -1,3 +1,5 @@
+
+const hlp = require('../helper/helper.js');
 module.exports = {
     name: 'help',
     aliases: ['h'],
@@ -38,7 +40,7 @@ module.exports = {
                 result += ("└► Command not recognized : " + args) + "\n";
             }
         }
-        hlp.writeArrayToChannel(seperateResultIntoWritableArray(result),channel);
+        hlp.writeArrayToChannel(hlp.seperateResultIntoWritableArray(result),channel);
         return "";
     }
 }
