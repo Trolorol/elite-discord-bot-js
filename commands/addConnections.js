@@ -40,8 +40,11 @@ module.exports = {
             let toWrite=stringHeader;
             console.log(client.database.connections);
             client.database.connections.forEach(element => {
-                arrayCons.forEach((i,index,array)=>{toWrite+="\""+element[i]+"\""+(index==array.length-1)?"":",";});
+                arrayCons.forEach((i,index,array)=>{
+                    toWrite=toWrite.concat("\""+element[i]+"\""+((index==array.length-1)?"":","));
+                });
                 toWrite+="\n";
+                
             });
             writeStream.write(toWrite);
             
