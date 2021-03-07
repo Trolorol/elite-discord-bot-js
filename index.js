@@ -38,6 +38,7 @@ for (const file of databaseFiles) {
 }
 
 client.once('ready', () => {
+    console.log(client.database.connections);
   console.log('Bot Connectado');
 });
 
@@ -73,14 +74,15 @@ client.on('ready', () =>{
                     }
                     
                 } catch (error) {
-                    result = ("Command "+commandName+" failed to execute due to:" + error);
+                    //result = ("Command "+commandName+" failed to execute due to:" + error);
+                    console.log("Command "+commandName+" failed to execute due to:" + error);
                 }
             } else {
-                 result = 'Command not found';
+                 //result = 'Command not found';
+                 console.log("Command "+commandName+" not found");
             }
           
             if(result !=""){
-                
                 msg.channel.send(result);
             }
             

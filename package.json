@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Trolorol/elite-discord-bot-js#readme",
   "dependencies": {
+    "csv": "^5.3.2",
     "csv-parser": "^3.0.0",
     "csv-writer": "^1.6.0",
     "discord": "^0.8.2",
