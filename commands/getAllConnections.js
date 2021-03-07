@@ -13,6 +13,7 @@ module.exports = {
             client.database.connections.forEach(element => {
                 let cons = JSON.stringify(element,(key,value)=>{
                     if (key=="userid") return undefined;
+                    if (value=="") return undefined;
                     return value;
                 });
                 const user =hlp.searchUser(client,element.userid);
